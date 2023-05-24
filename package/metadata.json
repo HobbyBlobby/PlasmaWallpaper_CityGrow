@@ -1,0 +1,21 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "%{EMAIL}",
+                "Name": "%{AUTHOR}"
+            }
+        ],
+        "Description": "City Grow simulator as screen locker",
+        "Icon": "plasma",
+        "Id": "org.kde.plasma.citygrow",
+        "License": "LGPLv2+",
+        "Name": "Simple City Grow",
+        "ServiceTypes": [
+            "Plasma/Wallpaper"
+        ],
+        "Version": "%{VERSION}",
+        "Website": "https://plasma.kde.org/"
+    },
+    "X-Plasma-MainScript": "ui/main.qml"
+}
