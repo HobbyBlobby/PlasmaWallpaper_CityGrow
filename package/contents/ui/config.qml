@@ -20,23 +20,25 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.8
+import org.kde.plasma.plasmoid
 
 // for "units"
 import org.kde.plasma.components 3.0 as PlasmaComponents
 // import org.kde.kquickcontrols 2.0 as KQuickControls
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami as Kirigami
 
-Item {
-    id: page
+// Item {
+
+    Kirigami.FormLayout {
+      id: page
     width: childrenRect.width
     height: childrenRect.height
     
     property alias cfg_start_branches : start_branches.value;
     property alias cfg_scale : scale.value;
 
-    Kirigami.FormLayout {
-        anchors.left: parent.left
+    anchors.left: parent.left
         anchors.right: parent.right
     
         // Label {
@@ -68,4 +70,4 @@ Item {
             stepSize: 1
         }
     }
-}
+// }

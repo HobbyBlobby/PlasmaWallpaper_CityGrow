@@ -1,6 +1,7 @@
 var cell_count_x = 0;
 var cell_count_y = 0;
-var SIZE = wallpaper.configuration.scale; // default = 3
+// var SIZE = wallpaper.configuration.scale; // default = 3
+var SIZE = 1; // default = 3
 
 var lifeTime = 8000; //> config
 var lifeTime_branch = 15; //> config
@@ -11,7 +12,10 @@ var prop_branchOff_land = 6; //> config
 var prop_branchOff_tomain = 1;
 var branch_fallOff = 50;
 var change_hue_newMain = 9;
-var start_branches = wallpaper.configuration.start_branches; // 3
+// var start_branches = wallpaper.configuration.start_branches; // 3
+var start_branches = 0;
+// var start_branches = 3; // 3
+
 var max_steps_back = 300; //> config
 
 var lightness_default = 130;
@@ -19,6 +23,8 @@ var lightness_branch = 50;
 
 var cells = [];
 var branchList = [];
+
+var firstPaint = true;
 
 class Pos {
     constructor(x, y) { 
@@ -196,7 +202,7 @@ function dimensionChanged(width,height) {
   initialize();
 }
 
-function paintMatrix(ctx){
+function paintMatrix(ctx){    
     branchList.forEach(oldBranch => {
         let scaled_branchOff = prop_branchOff * (1.0+branch_fallOff) / (branch_fallOff + branchList.length);
         let scaled_branchOff_land = prop_branchOff_land * (1.0+branch_fallOff) / (branch_fallOff + branchList.length);
@@ -220,8 +226,25 @@ function paintMatrix(ctx){
     return true;
 }
 
+function firstInit(ctx) {
+    if(firstPaint == false) return;
+    initialize();
+    firstPaint = false;
+    // testDraw(ctx);
+}
+
 function restart(ctx) {
     ctx.reset();
     initialize();
+    testDraw();
+}
+
+function testDraw(ctx) {
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'cyan';
+            ctx.beginPath();
+            ctx.moveTo(500, 500);
+            ctx.lineTo(500+Math.round(Math.random()*100), 500+Math.round(Math.random()*100));
+            ctx.stroke();
 }
 

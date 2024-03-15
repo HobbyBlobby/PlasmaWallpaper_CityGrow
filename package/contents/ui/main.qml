@@ -17,66 +17,88 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
+import QtQuick 2.0
 
-import QtQuick.Layouts 1.1
+// import QtQuick.Layouts
 
-import org.kde.plasma.core 2.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.core
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.extras as PlasmaExtras
+
+import org.kde.plasma.plasmoid
+import org.kde.plasma.wallpapers.image as Wallpaper
 
 //We need units from it
-import org.kde.plasma.core 2.0 as Plasmacore
+import org.kde.plasma.core as Plasmacore
 
 import "code/city.js" as City
 
-
-Canvas {
-    id: root
-    anchors.fill: parent
-
-    onPaint: {
-        var ctx = getContext("2d");
-        var bRunning = City.paintMatrix(ctx);
-        if(!bRunning) {
-            stepTimer.stop();
-            resetTimer.start();
-        };
-    }
-
-    onWidthChanged: {
-        stepTimer.stop();
-        City.dimensionChanged(width,height);
-        stepTimer.start();
-    }
-    onHeightChanged: {
-        stepTimer.stop();
-        City.dimensionChanged(width,height);
-        stepTimer.start();
-    }
-
-    Timer {
-        id: stepTimer
-        interval: 40
-        repeat: true
-        running: true
-        triggeredOnStart: true
-
-        onTriggered: {
-            root.requestPaint();
+WallpaperItem {
+    id: wallpaper;
+    // Rectangle {
+    //     anchors.fill: parent
+    //     color:"cyan";
+    // }
+    Canvas {
+        id: root
+        anchors.fill: parent
+    // 
+        onPaint: {
+            var ctx = getContext("2d");
+            // City.firstInit(ctx);
+            // City.testDraw(ctx);
+            var bRunning = City.paintMatrix(ctx);
+            // ctx.lineWidth = 5;
+            // ctx.strokeStyle = 'cyan';
+            // ctx.beginPath();
+            // ctx.moveTo(500, 500);
+            // ctx.lineTo(1000, 1000);
+            // ctx.stroke();
+            if(!bRunning) {
+                stepTimer.stop();
+                resetTimer.start();
+            };
         }
-
-    }
     
-    Timer {
-        id: resetTimer
-        interval: 5000
-        repeat: false
-        running: false
-        triggeredOnStart: false
-        onTriggered: {
-            City.restart(getContext("2d"));
+        onWidthChanged: {
+            City.start_branches = wallpaper.configuration.start_branches;
+            City.SIZE = wallpaper.configuration.scale;
+            stepTimer.stop();
+            City.dimensionChanged(width,height);
             stepTimer.start();
+        }
+        onHeightChanged: {
+            City.start_branches = wallpaper.configuration.start_branches;
+            City.SIZE = wallpaper.configuration.scale;
+            // City.testDraw(root.getContext("2d"));
+            stepTimer.stop();
+            City.dimensionChanged(width,height);
+            stepTimer.start();
+        }
+    
+        Timer {
+            id: stepTimer
+            interval: 40
+            repeat: true
+            running: true
+            triggeredOnStart: true
+    
+            onTriggered: {
+                root.requestPaint();
+            }
+    
+        }
+        
+        Timer {
+            id: resetTimer
+            interval: 5000
+            repeat: false
+            running: false
+            triggeredOnStart: false
+            onTriggered: {
+                City.restart(getContext("2d"));
+                stepTimer.start();
+            }
         }
     }
 }
