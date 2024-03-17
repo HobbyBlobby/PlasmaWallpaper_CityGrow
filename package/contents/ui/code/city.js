@@ -1,7 +1,7 @@
 var cell_count_x = 0;
 var cell_count_y = 0;
 // var SIZE = wallpaper.configuration.scale; // default = 3
-var SIZE = 1; // default = 3
+var SIZE = 3; // default = 3
 
 var lifeTime = 8000; //> config
 var lifeTime_branch = 15; //> config
@@ -24,7 +24,10 @@ var lightness_branch = 50;
 var cells = [];
 var branchList = [];
 
-var firstPaint = true;
+var width = 100;
+var height = 100;
+var firstDraw = true;
+var config_save = null;
 
 class Pos {
     constructor(x, y) { 
@@ -183,7 +186,13 @@ function randomPos() {
     return Pos.fromIdx(Math.round(Math.random() * cells.length));
 }
 
-function initialize() {
+function initialize(config) {
+    start_branches = config.start_branches;
+    SIZE = config.scale;
+
+    cell_count_x = Math.round(width / config.scale / 2);
+    cell_count_y = Math.round(height / config.scale / 2);
+
     for(let y=0;y<cell_count_y;y++) {
         for(let x=0;x<cell_count_x;x++) {
             let idx = y*cell_count_x+x;
@@ -196,13 +205,19 @@ function initialize() {
     }
 }
 
-function dimensionChanged(width,height) {
-  cell_count_x = Math.round(width / SIZE / 2);
-  cell_count_y = Math.round(height / SIZE / 2);
-  initialize();
+function dimensionChanged(width,height, config) {
+  width = width; 
+  height = height;
+  initialize(config);
 }
 
-function paintMatrix(ctx){    
+function paintMatrix(ctx, size, config){    
+    if(config != config_save) {
+        width = size.width;
+        height = size.height;
+        restart(ctx, config);
+        config_save = config;
+    }
     branchList.forEach(oldBranch => {
         let scaled_branchOff = prop_branchOff * (1.0+branch_fallOff) / (branch_fallOff + branchList.length);
         let scaled_branchOff_land = prop_branchOff_land * (1.0+branch_fallOff) / (branch_fallOff + branchList.length);
@@ -226,17 +241,9 @@ function paintMatrix(ctx){
     return true;
 }
 
-function firstInit(ctx) {
-    if(firstPaint == false) return;
-    initialize();
-    firstPaint = false;
-    // testDraw(ctx);
-}
-
-function restart(ctx) {
+function restart(ctx, config) {
     ctx.reset();
-    initialize();
-    testDraw();
+    initialize(config);
 }
 
 function testDraw(ctx) {

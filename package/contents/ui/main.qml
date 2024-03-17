@@ -35,25 +35,12 @@ import "code/city.js" as City
 
 WallpaperItem {
     id: wallpaper;
-    // Rectangle {
-    //     anchors.fill: parent
-    //     color:"cyan";
-    // }
     Canvas {
         id: root
         anchors.fill: parent
-    // 
         onPaint: {
             var ctx = getContext("2d");
-            // City.firstInit(ctx);
-            // City.testDraw(ctx);
-            var bRunning = City.paintMatrix(ctx);
-            // ctx.lineWidth = 5;
-            // ctx.strokeStyle = 'cyan';
-            // ctx.beginPath();
-            // ctx.moveTo(500, 500);
-            // ctx.lineTo(1000, 1000);
-            // ctx.stroke();
+            var bRunning = City.paintMatrix(ctx, root.canvasSize, wallpaper.configuration);
             if(!bRunning) {
                 stepTimer.stop();
                 resetTimer.start();
@@ -61,18 +48,13 @@ WallpaperItem {
         }
     
         onWidthChanged: {
-            City.start_branches = wallpaper.configuration.start_branches;
-            City.SIZE = wallpaper.configuration.scale;
             stepTimer.stop();
-            City.dimensionChanged(width,height);
+            City.dimensionChanged(width,height, wallpaper.configuration);
             stepTimer.start();
         }
         onHeightChanged: {
-            City.start_branches = wallpaper.configuration.start_branches;
-            City.SIZE = wallpaper.configuration.scale;
-            // City.testDraw(root.getContext("2d"));
             stepTimer.stop();
-            City.dimensionChanged(width,height);
+            City.dimensionChanged(width,height, wallpaper.configuration);
             stepTimer.start();
         }
     
@@ -82,7 +64,6 @@ WallpaperItem {
             repeat: true
             running: true
             triggeredOnStart: true
-    
             onTriggered: {
                 root.requestPaint();
             }
@@ -96,7 +77,7 @@ WallpaperItem {
             running: false
             triggeredOnStart: false
             onTriggered: {
-                City.restart(getContext("2d"));
+                City.restart(root.getContext("2d"), wallpaper.configuration);
                 stepTimer.start();
             }
         }
