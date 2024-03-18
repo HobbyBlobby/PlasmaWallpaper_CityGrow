@@ -19,17 +19,12 @@
 
 import QtQuick 2.0
 
-// import QtQuick.Layouts
-
 import org.kde.plasma.core
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.extras as PlasmaExtras
 
 import org.kde.plasma.plasmoid
-import org.kde.plasma.wallpapers.image as Wallpaper
-
-//We need units from it
-import org.kde.plasma.core as Plasmacore
+import org.kde.plasma.core as PlasmaCore
 
 import "code/city.js" as City
 
@@ -38,25 +33,29 @@ WallpaperItem {
     Canvas {
         id: root
         anchors.fill: parent
+        
+        property var screen: Screen
+        property var screenSize: !!screen.geometry ? Qt.size(screen.geometry.width, screen.geometry.height):  Qt.size(screen.width, screen.height)
+        
         onPaint: {
             var ctx = getContext("2d");
-            var bRunning = City.paintMatrix(ctx, root.canvasSize, wallpaper.configuration);
+            var bRunning = City.paintMatrix(ctx, screenSize, wallpaper.configuration);
             if(!bRunning) {
                 stepTimer.stop();
                 resetTimer.start();
             };
         }
     
-        onWidthChanged: {
-            stepTimer.stop();
-            City.dimensionChanged(width,height, wallpaper.configuration);
-            stepTimer.start();
-        }
-        onHeightChanged: {
-            stepTimer.stop();
-            City.dimensionChanged(width,height, wallpaper.configuration);
-            stepTimer.start();
-        }
+        // onWidthChanged: {
+        //     stepTimer.stop();
+        //     City.dimensionChanged(width,height, wallpaper.configuration);
+        //     stepTimer.start();
+        // }
+        // onHeightChanged: {
+        //     stepTimer.stop();
+        //     City.dimensionChanged(width,height, wallpaper.configuration);
+        //     stepTimer.start();
+        // }
     
         Timer {
             id: stepTimer

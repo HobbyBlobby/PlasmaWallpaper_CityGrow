@@ -32,20 +32,16 @@ import org.kde.kirigami as Kirigami
 
     Kirigami.FormLayout {
       id: page
-    width: childrenRect.width
-    height: childrenRect.height
-    
-    property alias cfg_start_branches : start_branches.value;
-    property alias cfg_scale : scale.value;
 
-    anchors.left: parent.left
+      
+        property alias cfg_start_branches : start_branches.value;
+        property alias cfg_scale : scale.value;
+
+        anchors.left: parent.left
         anchors.right: parent.right
-    
-        // Label {
-            // anchors.verticalCenter: parent.verticalCenter
-            // rightPadding: 15
-            // text: i18n("Start Branches") + " (" + start_branches.value + ")"
-        // }
+
+        signal configurationChanged()
+
         PlasmaComponents.Slider {
             id: start_branches
             Kirigami.FormData.label: i18n("Stat Branches (%1)", start_branches.value)
@@ -55,11 +51,7 @@ import org.kde.kirigami as Kirigami
             snapMode: Slider.SnapAlways
             stepSize: 1
         }
-        // Label {
-            // anchors.verticalCenter: parent.verticalCenter
-            // rightPadding: 15
-            // text: i18n("Scale (%1)", scale.value)
-        // }
+
         PlasmaComponents.Slider {
             id: scale
             Kirigami.FormData.label: i18n("Scale (%1)", scale.value)

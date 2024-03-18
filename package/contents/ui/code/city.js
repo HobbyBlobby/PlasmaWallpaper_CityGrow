@@ -28,6 +28,7 @@ var width = 100;
 var height = 100;
 var firstDraw = true;
 var config_save = null;
+var size_save = null;
 
 class Pos {
     constructor(x, y) { 
@@ -212,11 +213,12 @@ function dimensionChanged(width,height, config) {
 }
 
 function paintMatrix(ctx, size, config){    
-    if(config != config_save) {
+    if(config != config_save || size != size_save) {
         width = size.width;
         height = size.height;
         restart(ctx, config);
         config_save = config;
+        size_save = size;
     }
     branchList.forEach(oldBranch => {
         let scaled_branchOff = prop_branchOff * (1.0+branch_fallOff) / (branch_fallOff + branchList.length);
