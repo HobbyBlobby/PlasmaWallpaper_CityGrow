@@ -119,7 +119,7 @@ Kirigami.FormLayout {
         }
         PlasmaComponents.CheckBox {
             id: checkedSmartPlay
-            Kirigami.FormData.label: i18n("Pause simulationwhen when wallpaper is not visible\nDo not use in screen saver mode!")
+            Kirigami.FormData.label: i18n("Pause simulation when when wallpaper is not visible\nDo not use in screen saver mode!")
             checked: cfg_checkedSmartPlay
         }
     }
