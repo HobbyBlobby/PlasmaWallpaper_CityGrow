@@ -1,14 +1,19 @@
+// Large parts of this code is copied from the smart video wallpaper
+// https://store.kde.org/p/1316299
+
 import QtQuick
 import QtQuick.Window
 import org.kde.taskmanager as TaskManager
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kitemmodels as KItemModels
 
 Item {
     id: wModel
-    // property alias screenGeometry: tasksModel.screenGeometry
+    property alias screenGeometry: tasksModel.screenGeometry
     property bool runSimulation: true
     property bool checkSmartPlay: wallpaper.configuration.checkedSmartPlay
-    
+    property var screen: Screen
+
     TaskManager.VirtualDesktopInfo { id: virtualDesktopInfo }
     TaskManager.ActivityInfo { id: activityInfo }
     TaskManager.TasksModel {
@@ -18,7 +23,7 @@ Item {
 
         activity: activityInfo.currentActivity
         virtualDesktop: virtualDesktopInfo.currentDesktop
-        // screenGeometry: wallpaper.screenGeometry // Warns "Unable to assign [undefined] to QRect" during init, but works thereafter.
+        screenGeometry: wallpaper.screenGeometry || Qt.rect(0, 0, screen.width, screen.height) // default QRect for init process
 
         filterByActivity: true
         filterByVirtualDesktop: true
@@ -31,30 +36,83 @@ Item {
             fullScreenWindowModel.sourceModel = tasksModel
         }
     }
-    
-    PlasmaCore.SortFilterModel {
+
+    KItemModels.KSortFilterProxyModel {
         id: maximizedWindowModel
-        filterRole: 'IsMaximized'
-        filterRegExp: 'true'
+        filterRoleName: 'IsMaximized'
+        filterRegularExpression: RegExp("true")
         onDataChanged: updateWindowsinfo(wModel.checkSmartPlay)
         onCountChanged: updateWindowsinfo(wModel.checkSmartPlay)
     }
-    PlasmaCore.SortFilterModel {
+    KItemModels.KSortFilterProxyModel {
         id: fullScreenWindowModel
-        filterRole: 'IsFullScreen'
-        filterRegExp: 'true'
+        filterRoleName: 'IsFullScreen'
+        filterRegularExpression: RegExp("true")
         onDataChanged: updateWindowsinfo(wModel.checkSmartPlay)
         onCountChanged: updateWindowsinfo(wModel.checkSmartPlay)
     }
-    
+    KItemModels.KSortFilterProxyModel {
+        id: onlyWindowsModel
+        filterRoleName: 'IsWindow'
+        filterRegularExpression: RegExp("true")
+        onDataChanged: updateWindowsinfo(wModel.checkSmartPlay)
+        onCountChanged: updateWindowsinfo(wModel.checkSmartPlay)
+    }
+    KItemModels.KSortFilterProxyModel {
+        id: minimizedWindowModel
+        filterRoleName: 'IsMinimized'
+        filterRegularExpression: RegExp("true")
+        onDataChanged: updateWindowsinfo(wModel.checkSmartPlay)
+        onCountChanged: updateWindowsinfo(wModel.checkSmartPlay)
+    }
+
     function updateWindowsinfo(checkActive) {
         if(!checkActive) {
             runSimulation = true;
             return;
         }
         if(maximizedWindowModel.count + fullScreenWindowModel.count > 0) {
-            runSimulation = false;
-            return;
+            // we have full screen and/or maximized Windows > but the can be minimized at the same time > have a closer look
+            var joinApps  = [];
+            var minApps  = [];
+            var aObj;
+            var i;
+            var j;
+            // add fullscreen apps
+            for (i = 0 ; i < fullScreenWindowModel.count ; i++){
+                aObj = fullScreenWindowModel.get(i)
+                joinApps.push(aObj.AppPid)
+            }
+            // add maximized apps
+            for (i = 0 ; i < maximizedWindowModel.count ; i++){
+                aObj = maximizedWindowModel.get(i)
+                joinApps.push(aObj.AppPid)                
+            }
+
+            // add minimized apps
+            for (i = 0 ; i < minimizedWindowModel.count ; i++){
+                aObj = minimizedWindowModel.get(i)
+                minApps.push(aObj.AppPid)
+            }
+           	
+            joinApps = removeDuplicates(joinApps) // for qml Kubuntu 18.04
+            
+            joinApps.sort();
+            minApps.sort();
+
+            var twoStates = 0
+            j = 0;
+            for(i = 0 ; i < minApps.length ; i++){
+                if(minApps[i] === joinApps[j]){
+                    twoStates = twoStates + 1;
+                    j = j + 1;
+                }
+            }
+            if(fullScreenWindowModel.count + maximizedWindowModel.count - twoStates > 0) {
+                runSimulation = false;
+                return;
+            }
         }
+        runSimulation = true;
     }
 }

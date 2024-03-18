@@ -96,12 +96,7 @@ Kirigami.FormLayout {
           
     property alias cfg_start_branches : start_branches.value;
     property alias cfg_scale : scale.value;
-    // property alias cfg_checkedSmartPlay : checkedSmartPlay.checked;
-
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.top: parent.top
-
-        // signal configurationChanged()
+    property alias cfg_checkedSmartPlay : checkedSmartPlay.checked;
 
         PlasmaComponents.Slider {
             id: start_branches
@@ -122,9 +117,9 @@ Kirigami.FormLayout {
             snapMode: Slider.SnapAlways
             stepSize: 1
         }
-        // PlasmaComponents.CheckBox {
-        //     id: checkedSmartPlay
-        //     Kirigami.FormData.label: i18n("Pause simulationwhen when wallpaper is not visible\nDo not use in screen saver mode!")
-        //     checked: cfg_checkedSmartPlay
-        // }
+        PlasmaComponents.CheckBox {
+            id: checkedSmartPlay
+            Kirigami.FormData.label: i18n("Pause simulationwhen when wallpaper is not visible\nDo not use in screen saver mode!")
+            checked: cfg_checkedSmartPlay
+        }
     }

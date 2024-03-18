@@ -34,17 +34,28 @@ WallpaperItem {
     Canvas {
         id: root
         anchors.fill: parent
-        // property bool running: windowModel.runSimulation
-        // onRunningChanged: root.running ? stepTimer.stop() : stepTimer.start()
+        property bool running: windowModel.runSimulation
+        onRunningChanged: pauseOnHide()
         
-        // WindowModel {
-        //     id: windowModel
-        // }
+        WindowModel {
+            id: windowModel
+        }
         
         property var screen: Screen
         property var screenSize: !!screen.geometry ? Qt.size(screen.geometry.width, screen.geometry.height):  Qt.size(screen.width, screen.height)
         
+        function pauseOnHide() {
+            if(root.running) {
+                stepTimer.start();
+            } else {
+                stepTimer.stop();
+                resetTimer.stop(); // in case we are in the state of waiting for new restart
+                // the reset timer will automatically be started, if the stepTimer is started, but no brnaches are available in the "city"
+            }
+        }
+        
         onPaint: {
+            // if(!root.running) {stepTimer.stop();}
             var ctx = getContext("2d");
             var bRunning = City.paintMatrix(ctx, screenSize, wallpaper.configuration);
             if(!bRunning) {
