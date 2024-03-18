@@ -34,6 +34,8 @@ Item {
         Component.onCompleted: {
             maximizedWindowModel.sourceModel = tasksModel
             fullScreenWindowModel.sourceModel = tasksModel
+            onlyWindowsModel.sourceModel = tasksModel
+            minimizedWindowModel.sourceModel = tasksModel
         }
     }
 
@@ -80,21 +82,21 @@ Item {
             var j;
             // add fullscreen apps
             for (i = 0 ; i < fullScreenWindowModel.count ; i++){
-                aObj = fullScreenWindowModel.get(i)
-                joinApps.push(aObj.AppPid)
+                aObj = fullScreenWindowModel.data(fullScreenWindowModel.index(i,0));
+                joinApps.push(aObj.AppPid);
             }
             // add maximized apps
             for (i = 0 ; i < maximizedWindowModel.count ; i++){
-                aObj = maximizedWindowModel.get(i)
-                joinApps.push(aObj.AppPid)                
+                aObj = maximizedWindowModel.data(maximizedWindowModel.index(i,0));
+                joinApps.push(aObj.AppPid);               
             }
 
             // add minimized apps
             for (i = 0 ; i < minimizedWindowModel.count ; i++){
-                aObj = minimizedWindowModel.get(i)
-                minApps.push(aObj.AppPid)
+                aObj = minimizedWindowModel.data(minimizedWindowModel.index(i,0));
+                minApps.push(aObj.AppPid);
             }
-           	
+
             joinApps = removeDuplicates(joinApps) // for qml Kubuntu 18.04
             
             joinApps.sort();
@@ -115,4 +117,11 @@ Item {
         }
         runSimulation = true;
     }
+    
+    function removeDuplicates(arrArg) {
+        return arrArg.filter(function(elem, pos,arr) {
+            return arr.indexOf(elem) == pos;
+        });
+    }
+
 }
