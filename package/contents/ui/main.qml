@@ -30,9 +30,16 @@ import "code/city.js" as City
 
 WallpaperItem {
     id: wallpaper;
+    
     Canvas {
         id: root
         anchors.fill: parent
+        // property bool running: windowModel.runSimulation
+        // onRunningChanged: root.running ? stepTimer.stop() : stepTimer.start()
+        
+        // WindowModel {
+        //     id: windowModel
+        // }
         
         property var screen: Screen
         property var screenSize: !!screen.geometry ? Qt.size(screen.geometry.width, screen.geometry.height):  Qt.size(screen.width, screen.height)

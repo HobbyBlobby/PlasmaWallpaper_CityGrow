@@ -68,8 +68,9 @@ class Branch {
         context.lineWidth = 2;
         context.strokeStyle = this.getColor();
         context.beginPath();
-        context.moveTo(2*SIZE*fromPos.x, 2*SIZE*fromPos.y);
-        context.lineTo(2*SIZE*toPos.x, 2*SIZE*toPos.y);
+        let offset = context.lineWidth;
+        context.moveTo(2*SIZE*fromPos.x + offset, 2*SIZE*fromPos.y + offset);
+        context.lineTo(2*SIZE*toPos.x + offset, 2*SIZE*toPos.y + offset);
         context.stroke();
         this.pos = toPos;
         this.ownFields.push(toPos);
