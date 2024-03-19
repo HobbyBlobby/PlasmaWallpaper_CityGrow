@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(plasma-citygrow)
+project(plasma-citygrow_debug)
 
 set(PLASMA_VERSION "6.0.0")
 set(QT_MIN_VERSION "6.6.0")
