@@ -49,7 +49,7 @@ Item {
 
         activity: activityInfo.currentActivity
         virtualDesktop: virtualDesktopInfo.currentDesktop
-        screenGeometry: wallpaper.screenGeometry || Qt.rect(0, 0, screen.width, screen.height) // default QRect for init process
+        screenGeometry: wallpaper.screenGeometry  || Qt.rect(screen.virtualX, screen.virtualY, screen.width, screen.height) // take virtual coordinates for multiple displays
 
         filterByActivity: true
         filterByVirtualDesktop: true
@@ -107,22 +107,11 @@ Item {
             var i;
             var j;
             // add fullscreen apps
-            for (i = 0 ; i < fullScreenWindowModel.count ; i++){
-                aObj = fullScreenWindowModel.data(fullScreenWindowModel.index(i,0));
-                joinApps.push(aObj.AppPid);
-            }
+            findAppIds(fullScreenWindowModel, joinApps);
             // add maximized apps
-            for (i = 0 ; i < maximizedWindowModel.count ; i++){
-                aObj = maximizedWindowModel.data(maximizedWindowModel.index(i,0));
-                joinApps.push(aObj.AppPid);               
-            }
-
+            findAppIds(maximizedWindowModel, joinApps);
             // add minimized apps
-            for (i = 0 ; i < minimizedWindowModel.count ; i++){
-                aObj = minimizedWindowModel.data(minimizedWindowModel.index(i,0));
-                minApps.push(aObj.AppPid);
-            }
-
+            findAppIds(minimizedWindowModel, minApps);
             joinApps = removeDuplicates(joinApps) // for qml Kubuntu 18.04
             
             joinApps.sort();
@@ -136,12 +125,23 @@ Item {
                     j = j + 1;
                 }
             }
+
             if(fullScreenWindowModel.count + maximizedWindowModel.count - twoStates > 0) {
                 runSimulation = false;
                 return;
             }
         }
         runSimulation = true;
+    }
+    
+    function findAppIds(model, arr) {
+        for(let row = 0; row < model.rowCount(); row++) {
+            for(let column = 0 ; column < model.columnCount(); column++) {
+                let aObj = model.data(model.index(row,column));
+                arr.push(aObj);
+            }
+        }
+        return arr;
     }
     
     function removeDuplicates(arrArg) {
