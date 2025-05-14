@@ -17,6 +17,14 @@
         <label>Pause the video when existing a maximized or full-screen windows.</label>
         <default>false</default>
     </entry>
+      <entry name="show_reverse" type="bool">
+        <label>Show reverse process at end of animation?</label>
+        <default>true</default>
+    </entry>
+      <entry name="fill_city" type="bool">
+        <label>Fill spaces inbetween the lines?</label>
+        <default>true</default>
+    </entry>
 
   </group>
 

@@ -103,6 +103,8 @@ Kirigami.FormLayout {
     property alias cfg_start_branches : start_branches.value;
     property alias cfg_scale : scale.value;
     property alias cfg_checkedSmartPlay : checkedSmartPlay.checked;
+    property alias cfg_show_reverse : show_reverse.checked;
+    property alias cfg_fill_city : fill_city.checked;
 
         PlasmaComponents.Slider {
             id: start_branches
@@ -125,7 +127,19 @@ Kirigami.FormLayout {
         }
         PlasmaComponents.CheckBox {
             id: checkedSmartPlay
-            Kirigami.FormData.label: i18n("Pause simulation when when wallpaper is not visible\nDo not use in screen saver mode!")
+            Kirigami.FormData.label: i18n("Pause simulation when wallpaper is not visible?\n(Do not use in screen saver mode.)")
             checked: cfg_checkedSmartPlay
+        }
+    
+        PlasmaComponents.CheckBox {
+            id: show_reverse
+            Kirigami.FormData.label: i18n("Show reverse process at end of animation?")
+            checked: cfg_show_reverse
+        }
+        
+        PlasmaComponents.CheckBox {
+            id: fill_city
+            Kirigami.FormData.label: i18n("Fill spaces inbetween the lines?")
+            checked: cfg_fill_city
         }
     }

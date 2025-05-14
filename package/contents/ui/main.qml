@@ -56,7 +56,7 @@ WallpaperItem {
             } else {
                 stepTimer.stop();
                 resetTimer.stop(); // in case we are in the state of waiting for new restart
-                // the reset timer will automatically be started, if the stepTimer is started, but no brnaches are available in the "city"
+                // the reset timer will automatically be started, if the stepTimer is started, but no branches are available in the "city"
             }
         }
         
@@ -95,7 +95,7 @@ WallpaperItem {
         
         Timer {
             id: resetTimer
-            interval: 5000
+            interval: 1000
             repeat: false
             running: false
             triggeredOnStart: false
