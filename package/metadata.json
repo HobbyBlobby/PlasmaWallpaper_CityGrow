@@ -9,9 +9,9 @@
         ],
         "Description": "City Grow simulator as screen locker",
         "Icon": "plasma",
-        "Id": "org.kde.plasma.citygrow_debug",
+        "Id": "org.kde.plasma.citygrow",
         "License": "LGPLv2+",
-        "Name": "Simple City Grow - Debug",
+        "Name": "Simple City Grow",
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     },

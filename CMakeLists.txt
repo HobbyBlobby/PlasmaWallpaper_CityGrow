@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(plasma-citygrow_debug)
+project(plasma-citygrow)
 
 set(PLASMA_VERSION "6.0.0")
 set(QT_MIN_VERSION "6.6.0")
@@ -11,7 +11,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 find_package(KF6 ${KF6_MIN_VERSION} REQUIRED)
 find_package(Plasma ${PLASMA_VERSION} REQUIRED)
 
-plasma_install_package(package org.kde.plasma.citygrow_debug wallpapers wallpaper)
+plasma_install_package(package org.kde.plasma.citygrow wallpapers wallpaper)
 
 # cmake_minimum_required(VERSION 3.16)
 # 
