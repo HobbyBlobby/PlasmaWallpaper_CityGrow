@@ -27,7 +27,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 // import QtQuick.Controls.Styles
-import org.kde.plasma.plasmoid
+// import org.kde.plasma.plasmoid
 
 // for "units"
 import org.kde.plasma.components 3.0 as PlasmaComponents
